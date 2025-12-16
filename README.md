@@ -114,7 +114,7 @@ Start the Skyvern service and UI (when DB is up and running)
 skyvern run all
 ```
 
-Go to http://localhost:8080 and use the UI to run a task
+Go to http://localhost:28742 and use the UI to run a task
 
 #### Code
 
@@ -125,7 +125,7 @@ skyvern = Skyvern()
 task = await skyvern.run_task(prompt="Find the top post on hackernews today")
 print(task)
 ```
-Skyvern starts running the task in a browser that pops up and closes it when the task is done. You will be able to view the task from http://localhost:8080/history
+Skyvern starts running the task in a browser that pops up and closes it when the task is done. You will be able to view the task from http://localhost:28742/history
 
 You can also run a task on different targets:
 ```python
@@ -135,7 +135,7 @@ from skyvern import Skyvern
 skyvern = Skyvern(api_key="SKYVERN API KEY")
 
 # Local Skyvern service
-skyvern = Skyvern(base_url="http://localhost:8000", api_key="LOCAL SKYVERN API KEY")
+skyvern = Skyvern(base_url="http://localhost:28743", api_key="LOCAL SKYVERN API KEY")
 
 task = await skyvern.run_task(prompt="Find the top post on hackernews today")
 print(task)
@@ -153,7 +153,7 @@ from skyvern import Skyvern
 # The path to your Chrome browser. This example path is for Mac.
 browser_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 skyvern = Skyvern(
-    base_url="http://localhost:8000",
+    base_url="http://localhost:28743",
     api_key="YOUR_API_KEY",
     browser_path=browser_path,
 )
@@ -247,7 +247,7 @@ skyvern stop server
    ```bash
     docker compose up -d
    ```
-3. Navigate to `http://localhost:8080` in your browser to start using the UI
+3. Navigate to `http://localhost:28742` in your browser to start using the UI
 
 > **Important:** Only one Postgres container can run on port 5432 at a time. If you switch from the CLI-managed Postgres to Docker Compose, you must first remove the original container:
 > ```bash
@@ -408,7 +408,7 @@ Make sure to have [uv](https://docs.astral.sh/uv/getting-started/installation/) 
     ```bash
     uv run skyvern quickstart
     ```
-3. Navigate to `http://localhost:8080` in your browser to start using the UI
+3. Navigate to `http://localhost:28742` in your browser to start using the UI
    *The Skyvern CLI supports Windows, WSL, macOS, and Linux environments.*
 
 # Documentation
@@ -500,7 +500,7 @@ Recommended `LLM_KEY`: `OPENROUTER`
 | `ENABLE_OPENAI_COMPATIBLE`| Register a custom OpenAI-compatible API endpoint | Boolean | `true`, `false` |
 | `OPENAI_COMPATIBLE_MODEL_NAME` | Model name for OpenAI-compatible endpoint | String | `yi-34b`, `gpt-3.5-turbo`, `mistral-large`, etc.|
 | `OPENAI_COMPATIBLE_API_KEY` | API key for OpenAI-compatible endpoint | String | `sk-1234567890`|
-| `OPENAI_COMPATIBLE_API_BASE` | Base URL for OpenAI-compatible endpoint | String | `https://api.together.xyz/v1`, `http://localhost:8000/v1`, etc.|
+| `OPENAI_COMPATIBLE_API_BASE` | Base URL for OpenAI-compatible endpoint | String | `https://api.together.xyz/v1`, `http://localhost:28743/v1`, etc.|
 | `OPENAI_COMPATIBLE_API_VERSION` | API version for OpenAI-compatible endpoint, optional| String | `2023-05-15`|
 | `OPENAI_COMPATIBLE_MAX_TOKENS` | Maximum tokens for completion, optional| Integer | `4096`, `8192`, etc.|
 | `OPENAI_COMPATIBLE_TEMPERATURE` | Temperature setting, optional| Float | `0.0`, `0.5`, `0.7`, etc.|

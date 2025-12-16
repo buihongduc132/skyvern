@@ -56,7 +56,7 @@ async def skyvern_run_task(prompt: str, url: str) -> dict[str, Any]:
     output = res.model_dump()["output"]
     base_url = settings.SKYVERN_BASE_URL
     run_history_url = (
-        "https://app.skyvern.com/history" if "skyvern.com" in base_url else "http://localhost:8080/history"
+        "https://app.skyvern.com/history" if "skyvern.com" in base_url else "http://localhost:28742/history"
     )
     return {"output": output, "run_history_url": run_history_url}
 
@@ -108,16 +108,16 @@ def run_ui() -> None:
     """Run the Skyvern UI server."""
     console.print(Panel("[bold blue]Starting Skyvern UI Server...[/bold blue]", border_style="blue"))
     try:
-        with console.status("[bold green]Checking for existing process on port 8080...") as status:
-            pids = get_pids_on_port(8080)
+        with console.status("[bold green]Checking for existing process on port 28742...") as status:
+            pids = get_pids_on_port(28742)
             if pids:
                 status.stop()
-                response = Confirm.ask("Process already running on port 8080. [yellow]Kill it?[/yellow]")
+                response = Confirm.ask("Process already running on port 28742. [yellow]Kill it?[/yellow]")
                 if response:
                     kill_pids(pids)
                     console.print("✅ [green]Process killed.[/green]")
                 else:
-                    console.print("[yellow]UI server not started. Process already running on port 8080.[/yellow]")
+                    console.print("[yellow]UI server not started. Process already running on port 28742.[/yellow]")
                     return
             status.stop()
     except Exception as e:  # pragma: no cover - CLI safeguards

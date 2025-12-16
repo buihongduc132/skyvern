@@ -3,7 +3,7 @@
 export const SkyvernEnvironment = {
     Cloud: "https://api.skyvern.com",
     Staging: "https://api-staging.skyvern.com",
-    Local: "http://localhost:8000",
+    Local: "http://localhost:28743",
 } as const;
 
 export type SkyvernEnvironment =

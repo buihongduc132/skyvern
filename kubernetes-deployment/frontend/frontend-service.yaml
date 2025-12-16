@@ -7,7 +7,7 @@ spec:
   type: ClusterIP # Or LoadBalancer
   ports:
     - name: http
-      port: 8080
+      port: 28742
       targetPort: 8080
     - name: artifact
       port: 9090

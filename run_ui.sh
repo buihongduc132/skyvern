@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pid=$(lsof -t -i :8080)
+pid=$(lsof -t -i :28742)
 if [ -n "$pid" ]; then
   kill "$pid"
 fi

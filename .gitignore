@@ -189,3 +189,7 @@ tmp/user_data_dir
 
 # Claude
 .claude
+
+# Codex / local tooling
+.opencode/
+reports/

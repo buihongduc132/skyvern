@@ -68,7 +68,10 @@ class Settings(BaseSettings):
     JSON_LOGGING: bool = False
     LOG_RAW_API_REQUESTS: bool = True
     LOG_LEVEL: str = "INFO"
-    PORT: int = 8000
+    # Persist LLM prompt/request/response artifacts for Thought-only LLM calls (ex: TaskV2 planner).
+    # Opt-out via `LOG_LLM_ARTIFACTS_FOR_THOUGHTS=false`.
+    LOG_LLM_ARTIFACTS_FOR_THOUGHTS: bool = True
+    PORT: int = 28743
     ALLOWED_ORIGINS: list[str] = ["*"]
     BLOCKED_HOSTS: list[str] = ["localhost"]
     ALLOWED_HOSTS: list[str] = []
@@ -367,7 +370,7 @@ class Settings(BaseSettings):
 
     TASK_BLOCKED_SITE_FALLBACK_URL: str = "https://www.google.com"
 
-    SKYVERN_APP_URL: str = "http://localhost:8080"
+    SKYVERN_APP_URL: str = "http://localhost:28742"
     # SkyvernClient Settings
     SKYVERN_BASE_URL: str = "https://api.skyvern.com"
     SKYVERN_API_KEY: str = "PLACEHOLDER"

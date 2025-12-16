@@ -1,0 +1,11 @@
+- Symptom: UI loads, but run "stream"/page progress never updates (stuck on "Starting the stream..." and/or backend unreachable).
+- Root causes:
+  - Local screenshot artifacts never wrote streaming PNG to `TEMP_PATH/{org}/{workflow_run_id}.png`, so WS stream had no frames.
+  - Backend dev reload crashed when cwd included `postgres-data/pgdata` (permission denied), so API never came up.
+  - Starting server from a different cwd broke `.env` discovery (settings defaulted to `PORT=8000`), mismatching the UI's API base.
+- Fixes:
+  - Write streaming PNG on screenshot artifact creation + persist via storage.
+  - Start server from `./temp` but export `.env` vars so settings stay correct.
+  - Load `.env` before settings import; avoid early settings import via analytics.
+  - Ignore `postgres-data` during pytest discovery.
+

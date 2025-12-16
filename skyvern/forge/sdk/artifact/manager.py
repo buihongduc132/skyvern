@@ -1,10 +1,13 @@
 import asyncio
+import shutil
 import time
 from collections import defaultdict
+from pathlib import Path
 
 import structlog
 
 from skyvern.forge import app
+from skyvern.forge.sdk.api.files import get_skyvern_temp_dir
 from skyvern.forge.sdk.artifact.models import Artifact, ArtifactType, LogEntityType
 from skyvern.forge.sdk.core import skyvern_context
 from skyvern.forge.sdk.db.id import generate_artifact_id
@@ -19,6 +22,57 @@ LOG = structlog.get_logger(__name__)
 class ArtifactManager:
     # task_id -> list of aio_tasks for uploading artifacts
     upload_aiotasks_map: dict[str, list[asyncio.Task[None]]] = defaultdict(list)
+
+    async def _write_streaming_screenshot(
+        self,
+        *,
+        organization_id: str,
+        artifact_type: ArtifactType,
+        data: bytes | None,
+        path: str | None,
+        task_id: str | None,
+        workflow_run_id: str | None,
+    ) -> None:
+        if artifact_type not in (ArtifactType.SCREENSHOT_ACTION, ArtifactType.SCREENSHOT_FINAL):
+            return
+        stream_id = workflow_run_id or task_id
+        if not organization_id or not stream_id:
+            return
+
+        file_name = f"{stream_id}.png"
+        org_dir = Path(get_skyvern_temp_dir()) / organization_id
+        dest_path = org_dir / file_name
+        org_dir.mkdir(parents=True, exist_ok=True)
+
+        try:
+            if data is not None:
+                await asyncio.to_thread(dest_path.write_bytes, data)
+            elif path is not None:
+                src_path = Path(path)
+                if src_path.exists():
+                    await asyncio.to_thread(shutil.copyfile, src_path, dest_path)
+                else:
+                    return
+            else:
+                return
+        except Exception:
+            LOG.exception(
+                "Failed to write streaming screenshot.",
+                organization_id=organization_id,
+                stream_id=stream_id,
+                artifact_type=artifact_type,
+            )
+            return
+
+        try:
+            await app.STORAGE.save_streaming_file(organization_id, file_name)
+        except Exception:
+            LOG.exception(
+                "Failed to persist streaming screenshot.",
+                organization_id=organization_id,
+                stream_id=stream_id,
+                artifact_type=artifact_type,
+            )
 
     async def _create_artifact(
         self,
@@ -75,6 +129,15 @@ class ArtifactManager:
             # Fire and forget
             aio_task = asyncio.create_task(app.STORAGE.store_artifact_from_path(artifact, path))
             self.upload_aiotasks_map[aio_task_primary_key].append(aio_task)
+
+        await self._write_streaming_screenshot(
+            organization_id=organization_id,
+            artifact_type=artifact_type,
+            data=data,
+            path=path,
+            task_id=task_id,
+            workflow_run_id=workflow_run_id,
+        )
 
         return artifact_id
 

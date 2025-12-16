@@ -5,7 +5,7 @@
 ## General 
 This README has the purpose to explain the way Skyvern is deployed using Kubernetes.
 
-One should take into consideration how it wants to deploy the application, either by using a service type LoadBalancer, which directly exposes port 8000 and 8080 on the host IP or by using ClusterIP service type, which requires an ingress and consequently a domain name.
+One should take into consideration how it wants to deploy the application, either by using a service type LoadBalancer, which directly exposes port 28743 and 28742 on the host IP or by using ClusterIP service type, which requires an ingress and consequently a domain name.
 
 This latter results in having the following endpoints:
 > FRONTEND: http(s)://skyvern.example.com/

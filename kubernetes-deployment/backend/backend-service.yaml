@@ -7,8 +7,8 @@ spec:
   type: ClusterIP # Or LoadBalancer
   ports:
     - name: http
-      port: 8000
-      targetPort: 8000
+      port: 28743
+      targetPort: 28743
     - name: cdp
       port: 9222
       targetPort: 9222

@@ -46,7 +46,7 @@ def custom_openapi(app: FastAPI) -> dict:
     openapi_schema["servers"] = [
         {"url": "https://api.skyvern.com", "x-fern-server-name": "Cloud"},
         {"url": "https://api-staging.skyvern.com", "x-fern-server-name": "Staging"},
-        {"url": "http://localhost:8000", "x-fern-server-name": "Local"},
+        {"url": "http://localhost:28743", "x-fern-server-name": "Local"},
     ]
     app.openapi_schema = openapi_schema
     return app.openapi_schema

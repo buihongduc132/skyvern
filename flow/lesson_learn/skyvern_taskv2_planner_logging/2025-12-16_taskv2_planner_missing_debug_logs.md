@@ -1,0 +1,13 @@
+- Time: 2025-12-16
+- Problem: TaskV2 hits “50 planning iterations” with UI showing no actions/steps; timeline thought fields empty ⇒ not debuggable.
+- Root cause:
+  - Thought updates skipped when values were empty strings / 0 (truthy checks).
+  - LLM prompt/request/response artifacts were only persisted for Step-based LLM calls, not Thought-only calls (TaskV2 planner).
+- Fix:
+  - Update thought fields when value is not None (store empty strings / 0).
+  - Add `LOG_LLM_ARTIFACTS_FOR_THOUGHTS` to persist LLM artifacts for Thought-only calls.
+- How to enable (debug only):
+  - Set `LOG_LLM_ARTIFACTS_FOR_THOUGHTS=true` (and restart backend).
+- Where to look:
+  - Run timeline: `/v1/runs/{run_id}/timeline`
+  - Artifacts: `/v1/runs/{run_id}/artifacts` (LLM prompt/request/response artifacts now show up for planner thoughts when enabled).

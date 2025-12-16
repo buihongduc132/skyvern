@@ -17,7 +17,7 @@ spec:
         - name: skyvern-backend
           image: public.ecr.aws/skyvern/skyvern:latest
           ports:
-            - containerPort: 8000
+            - containerPort: 28743
             - containerPort: 9222
           envFrom:
             - secretRef:

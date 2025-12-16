@@ -1,20 +1,23 @@
 import os
+from pathlib import Path
 
 import structlog
 import uvicorn
 from dotenv import load_dotenv
 
-from skyvern import analytics
-from skyvern.config import settings
-
 LOG = structlog.stdlib.get_logger()
 
 
 if __name__ == "__main__":
+    repo_root = Path(__file__).resolve().parents[2]
+    load_dotenv(repo_root / ".env", override=True)
+
+    from skyvern import analytics
+    from skyvern.config import settings
+
     analytics.capture("skyvern-oss-run-server")
     port = settings.PORT
     LOG.info("Agent server starting.", host="0.0.0.0", port=port)
-    load_dotenv()
 
     reload = settings.ENV == "local"
 
@@ -35,7 +38,9 @@ if __name__ == "__main__":
         port=port,
         log_level="info",
         reload=reload,
+        reload_dirs=[str(repo_root / "skyvern"), str(repo_root / "alembic")],
         reload_excludes=[
+            "postgres-data/**",
             f"{temp_path_for_excludes}/**/*.py",
             f"{artifact_path_for_excludes}/{settings.ENV}/**/scripts/**/**/*.py",
         ],

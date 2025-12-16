@@ -195,7 +195,7 @@ plugins = "sqlalchemy.ext.mypy.plugin"
 skyvern = "skyvern.cli.commands:cli_app"
 
 [tool.pytest.ini_options]
-norecursedirs = ["eval"]
+norecursedirs = ["eval", "postgres-data"]
 
 [tool.codeflash]
 # All paths are relative to this pyproject.toml's directory.

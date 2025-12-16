@@ -19,7 +19,7 @@ spec:
               service:
                 name: skyvern-backend
                 port:
-                  number: 8000
+                  number: 28743
           - path: /artifacts
             pathType: Prefix
             backend:
@@ -33,7 +33,7 @@ spec:
               service:
                 name: skyvern-frontend
                 port:
-                  number: 8080
+                  number: 28742
                   #tls:
                   #  - hosts:
                   #      - skyvern.example.com

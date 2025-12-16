@@ -77,8 +77,8 @@ def init_env(
             update_or_add_env_var("BROWSER_REMOTE_DEBUGGING_URL", remote_debugging_url)
         console.print("✅ [green]Browser configuration complete.[/green]")
 
-        console.print("🌐 [bold blue]Setting Skyvern Base URL to: http://localhost:8000[/bold blue]")
-        update_or_add_env_var("SKYVERN_BASE_URL", "http://localhost:8000")
+        console.print("🌐 [bold blue]Setting Skyvern Base URL to: http://localhost:28743[/bold blue]")
+        update_or_add_env_var("SKYVERN_BASE_URL", "http://localhost:28743")
 
         console.print("\n[bold yellow]To run Skyvern you can either:[/bold yellow]")
         console.print("• [green]skyvern run server[/green]  (reuses the DB we just created)")

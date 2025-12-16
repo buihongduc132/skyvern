@@ -3749,31 +3749,31 @@ class AgentDB:
                 )
             ).first()
             if thought_obj:
-                if workflow_run_block_id:
+                if workflow_run_block_id is not None:
                     thought_obj.workflow_run_block_id = workflow_run_block_id
-                if workflow_run_id:
+                if workflow_run_id is not None:
                     thought_obj.workflow_run_id = workflow_run_id
-                if workflow_id:
+                if workflow_id is not None:
                     thought_obj.workflow_id = workflow_id
-                if workflow_permanent_id:
+                if workflow_permanent_id is not None:
                     thought_obj.workflow_permanent_id = workflow_permanent_id
-                if observation:
+                if observation is not None:
                     thought_obj.observation = observation
-                if thought:
+                if thought is not None:
                     thought_obj.thought = thought
-                if answer:
+                if answer is not None:
                     thought_obj.answer = answer
-                if output:
+                if output is not None:
                     thought_obj.output = output
-                if input_token_count:
+                if input_token_count is not None:
                     thought_obj.input_token_count = input_token_count
-                if output_token_count:
+                if output_token_count is not None:
                     thought_obj.output_token_count = output_token_count
-                if reasoning_token_count:
+                if reasoning_token_count is not None:
                     thought_obj.reasoning_token_count = reasoning_token_count
-                if cached_token_count:
+                if cached_token_count is not None:
                     thought_obj.cached_token_count = cached_token_count
-                if thought_cost:
+                if thought_cost is not None:
                     thought_obj.thought_cost = thought_cost
                 await session.commit()
                 await session.refresh(thought_obj)

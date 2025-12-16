@@ -44,7 +44,7 @@ def update_or_add_env_var(key: str, value: str) -> None:
             "LOG_LEVEL": "INFO",
             "LITELLM_LOG": "CRITICAL",
             "DATABASE_STRING": "postgresql+psycopg://skyvern@localhost/skyvern",
-            "PORT": "8000",
+            "PORT": "28743",
             "ANALYTICS_ID": "anonymous",
             "ENABLE_LOG_ARTIFACTS": "false",
         }

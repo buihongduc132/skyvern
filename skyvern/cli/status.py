@@ -19,8 +19,8 @@ def _check_port(port: int) -> bool:
 
 
 def _status_table() -> Table:
-    api_port = int(os.getenv("PORT", 8000))
-    ui_port = 8080
+    api_port = int(os.getenv("PORT", 28743))
+    ui_port = 28742
     db_port = 5432
 
     components = [

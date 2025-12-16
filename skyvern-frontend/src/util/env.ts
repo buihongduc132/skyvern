@@ -1,4 +1,28 @@
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string;
+function rewriteLocalhostUrl(value: string | undefined): string | undefined {
+  if (!value || typeof window === "undefined") {
+    return value;
+  }
+
+  const pageHost = window.location.hostname;
+  if (!pageHost || pageHost === "localhost" || pageHost === "127.0.0.1") {
+    return value;
+  }
+
+  try {
+    const url = new URL(value);
+    if (url.hostname === "localhost" || url.hostname === "127.0.0.1") {
+      url.hostname = pageHost;
+      return url.toString();
+    }
+  } catch {
+    return value;
+  }
+
+  return value;
+}
+
+const apiBaseUrl =
+  rewriteLocalhostUrl(import.meta.env.VITE_API_BASE_URL as string) ?? "";
 
 if (!apiBaseUrl) {
   console.warn("apiBaseUrl environment variable was not set");
@@ -15,7 +39,9 @@ const buildTimeApiKey: string | null =
     ? import.meta.env.VITE_SKYVERN_API_KEY
     : null;
 
-const artifactApiBaseUrl = import.meta.env.VITE_ARTIFACT_API_BASE_URL;
+const artifactApiBaseUrl = rewriteLocalhostUrl(
+  import.meta.env.VITE_ARTIFACT_API_BASE_URL,
+);
 
 if (!artifactApiBaseUrl) {
   console.warn("artifactApiBaseUrl environment variable was not set");
@@ -30,7 +56,7 @@ const lsKeys = {
   apiKey: API_KEY_STORAGE_KEY,
 };
 
-const wssBaseUrl = import.meta.env.VITE_WSS_BASE_URL;
+const wssBaseUrl = rewriteLocalhostUrl(import.meta.env.VITE_WSS_BASE_URL) ?? "";
 
 let newWssBaseUrl = wssBaseUrl;
 try {

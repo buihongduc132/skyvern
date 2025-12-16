@@ -5,7 +5,7 @@ import { toast } from "@/components/ui/use-toast";
 import { ZoomableImage } from "@/components/ZoomableImage";
 import { useCostCalculator } from "@/hooks/useCostCalculator";
 import { useCredentialGetter } from "@/hooks/useCredentialGetter";
-import { getRuntimeApiKey } from "@/util/env";
+import { getRuntimeApiKey, wssBaseUrl } from "@/util/env";
 import {
   keepPreviousData,
   useQuery,
@@ -34,8 +34,6 @@ type StreamMessage = {
 };
 
 let socket: WebSocket | null = null;
-
-const wssBaseUrl = import.meta.env.VITE_WSS_BASE_URL;
 
 function TaskActions() {
   const taskId = useFirstParam("taskId", "runId");

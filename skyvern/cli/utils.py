@@ -28,7 +28,7 @@ async def start_services(server_only: bool = False) -> None:
             ui_process = await asyncio.create_subprocess_exec(sys.executable, "-m", "skyvern.cli.commands", "run", "ui")
 
         console.print("\n🎉 [bold green]Skyvern is now running![/bold green]")
-        console.print("🌐 [bold]Access the UI at:[/bold] [cyan]http://localhost:8080[/cyan]")
+        console.print("🌐 [bold]Access the UI at:[/bold] [cyan]http://localhost:28742[/cyan]")
         console.print(f"🔑 [bold]Your API key is in {resolve_backend_env_path()} as SKYVERN_API_KEY[/bold]")
 
         # Wait for processes to complete (they won't unless killed)

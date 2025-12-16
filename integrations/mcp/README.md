@@ -62,7 +62,7 @@ Use the following config if you want to set up Skyvern for any other MCP-enabled
   "mcpServers": {
     "Skyvern": {
       "env": {
-        "SKYVERN_BASE_URL": "https://api.skyvern.com", # "http://localhost:8000" if running locally
+        "SKYVERN_BASE_URL": "https://api.skyvern.com", # "http://localhost:28743" if running locally
         "SKYVERN_API_KEY": "YOUR_SKYVERN_API_KEY" # find the local SKYVERN_API_KEY in the .env file after running `skyvern init` or in your Skyvern Cloud console
       },
       "command": "PATH_TO_PYTHON",

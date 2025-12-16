@@ -34,7 +34,7 @@ npm install
 npm start
 ```
 
-This will build the app and serve from port 8080.
+This will build the app and serve from port 28742.
 
 ## Development
 
