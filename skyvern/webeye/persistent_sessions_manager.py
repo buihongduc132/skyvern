@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from math import floor
@@ -214,6 +215,7 @@ class PersistentSessionsManager:
             runnable_id=runnable_id,
             organization_id=organization_id,
         )
+        await self.database.start_persistent_browser_session(browser_session_id, organization_id)
 
         LOG.info("Browser session begin", browser_session_id=browser_session_id)
 
@@ -233,7 +235,16 @@ class PersistentSessionsManager:
 
     async def get_active_sessions(self, organization_id: str) -> list[PersistentBrowserSession]:
         """Get all active sessions for an organization."""
-        return await self.database.get_active_persistent_browser_sessions(organization_id)
+        sessions = await self.database.get_active_persistent_browser_sessions(organization_id)
+
+        async def _reconcile_started(s: PersistentBrowserSession) -> PersistentBrowserSession:
+            if s.runnable_id and s.started_at is None:
+                return await self.database.start_persistent_browser_session(
+                    s.persistent_browser_session_id, organization_id
+                )
+            return s
+
+        return await asyncio.gather(*[_reconcile_started(s) for s in sessions])
 
     async def get_browser_state(self, session_id: str, organization_id: str | None = None) -> BrowserState | None:
         """Get a specific browser session's state by session ID."""

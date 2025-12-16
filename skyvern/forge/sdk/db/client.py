@@ -4204,7 +4204,23 @@ class AgentDB:
                     .limit(page_size)
                 )
                 sessions = result.scalars().all()
-                return [PersistentBrowserSession.model_validate(session) for session in sessions]
+                now = datetime.utcnow()
+                mutated = False
+                for browser_session in sessions:
+                    if browser_session.runnable_id and browser_session.started_at is None:
+                        browser_session.started_at = now
+                        if browser_session.status in (None, "", "created", "retry"):
+                            browser_session.status = "running"
+                        mutated = True
+                if mutated:
+                    await session.commit()
+                    for browser_session in sessions:
+                        await session.refresh(browser_session)
+
+                parsed = [PersistentBrowserSession.model_validate(s) for s in sessions]
+                parsed.sort(key=lambda s: s.created_at, reverse=True)
+                parsed.sort(key=lambda s: 0 if s.status == "running" else 1)
+                return parsed
         except SQLAlchemyError:
             LOG.error("SQLAlchemyError", exc_info=True)
             raise
@@ -4426,6 +4442,48 @@ class AgentDB:
                     await session.refresh(persistent_browser_session)
                 else:
                     raise NotFoundError(f"PersistentBrowserSession {session_id} not found")
+        except NotFoundError:
+            LOG.error("NotFoundError", exc_info=True)
+            raise
+        except SQLAlchemyError:
+            LOG.error("SQLAlchemyError", exc_info=True)
+            raise
+        except Exception:
+            LOG.error("UnexpectedError", exc_info=True)
+            raise
+
+    async def start_persistent_browser_session(
+        self,
+        session_id: str,
+        organization_id: str,
+    ) -> PersistentBrowserSession:
+        """Mark a persistent browser session as started (sets started_at and status='running' if applicable)."""
+        try:
+            async with self.Session() as session:
+                persistent_browser_session = (
+                    await session.scalars(
+                        select(PersistentBrowserSessionModel)
+                        .filter_by(persistent_browser_session_id=session_id)
+                        .filter_by(organization_id=organization_id)
+                        .filter_by(deleted_at=None)
+                    )
+                ).first()
+                if not persistent_browser_session:
+                    raise NotFoundError(f"PersistentBrowserSession {session_id} not found")
+
+                if persistent_browser_session.started_at is None:
+                    persistent_browser_session.started_at = datetime.utcnow()
+                if persistent_browser_session.completed_at is None and persistent_browser_session.status in (
+                    None,
+                    "",
+                    "created",
+                    "retry",
+                ):
+                    persistent_browser_session.status = "running"
+
+                await session.commit()
+                await session.refresh(persistent_browser_session)
+                return PersistentBrowserSession.model_validate(persistent_browser_session)
         except NotFoundError:
             LOG.error("NotFoundError", exc_info=True)
             raise
